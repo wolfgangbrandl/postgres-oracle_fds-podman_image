@@ -1,0 +1,98 @@
++ export ENABLE_REPLICATION=false
++ ENABLE_REPLICATION=false
++ set -eu
+++ cgroup-limits
++ export_vars='MAX_MEMORY_LIMIT_IN_BYTES=9223372036854775807
+MEMORY_LIMIT_IN_BYTES=9223372036854771712
+NUMBER_OF_CORES=2
+NO_MEMORY_LIMIT=true'
++ export MAX_MEMORY_LIMIT_IN_BYTES=9223372036854775807 MEMORY_LIMIT_IN_BYTES=9223372036854771712 NUMBER_OF_CORES=2 NO_MEMORY_LIMIT=true
++ MAX_MEMORY_LIMIT_IN_BYTES=9223372036854775807
++ MEMORY_LIMIT_IN_BYTES=9223372036854771712
++ NUMBER_OF_CORES=2
++ NO_MEMORY_LIMIT=true
++ source /usr/share/container-scripts/postgresql/common.sh
+++ export POSTGRESQL_MAX_CONNECTIONS=100
+++ POSTGRESQL_MAX_CONNECTIONS=100
+++ export POSTGRESQL_MAX_PREPARED_TRANSACTIONS=0
+++ POSTGRESQL_MAX_PREPARED_TRANSACTIONS=0
+++ [[ true == \t\r\u\e ]]
+++ export POSTGRESQL_SHARED_BUFFERS=32MB
+++ POSTGRESQL_SHARED_BUFFERS=32MB
+++ export POSTGRESQL_EFFECTIVE_CACHE_SIZE=128MB
+++ POSTGRESQL_EFFECTIVE_CACHE_SIZE=128MB
+++ export POSTGRESQL_RECOVERY_FILE=/var/lib/pgsql/openshift-custom-recovery.conf
+++ POSTGRESQL_RECOVERY_FILE=/var/lib/pgsql/openshift-custom-recovery.conf
+++ export POSTGRESQL_CONFIG_FILE=/var/lib/pgsql/openshift-custom-postgresql.conf
+++ POSTGRESQL_CONFIG_FILE=/var/lib/pgsql/openshift-custom-postgresql.conf
+++ postinitdb_actions=
+++ shopt -s dotglob
+++ shopt -s extglob
++ set_pgdata
++ export PGDATA=/var/lib/pgsql/data/userdata
++ PGDATA=/var/lib/pgsql/data/userdata
++ mkdir -p /var/lib/pgsql/data/userdata
++ '[' -e /var/lib/pgsql/data/PG_VERSION ']'
++ chmod 700 /var/lib/pgsql/data/userdata
++ echo APP_DATA /opt/app-root
+APP_DATA /opt/app-root
++ echo CONTAINER_SCRIPTS_PATH /usr/share/container-scripts/postgresql
+CONTAINER_SCRIPTS_PATH /usr/share/container-scripts/postgresql
++ process_extending_files /opt/app-root/src/postgresql-pre-start /usr/share/container-scripts/postgresql/pre-start
++ local filename dir
+++ get_matched_files '*.sh' /opt/app-root/src/postgresql-pre-start /usr/share/container-scripts/postgresql/pre-start
+++ sort -u
+++ local 'pattern=*.sh' dir
+++ shift
+++ for dir in "$@"
+++ test -d /opt/app-root/src/postgresql-pre-start
+++ continue
+++ for dir in "$@"
+++ test -d /usr/share/container-scripts/postgresql/pre-start
+++ continue
++ read filename
++ for dir in "$@"
++ local file=/opt/app-root/src/postgresql-pre-start/
++ test -f /opt/app-root/src/postgresql-pre-start/
++ for dir in "$@"
++ local file=/usr/share/container-scripts/postgresql/pre-start/
++ test -f /usr/share/container-scripts/postgresql/pre-start/
++ read filename
++ check_env_vars
++ [[ -v POSTGRESQL_USER ]]
++ [[ -v POSTGRESQL_USER ]]
++ [[ -v POSTGRESQL_PASSWORD ]]
++ [[ -v POSTGRESQL_DATABASE ]]
++ '[' 4 -le 63 ']'
++ '[' 2 -le 63 ']'
++ postinitdb_actions+=,simple_db
++ '[' -v POSTGRESQL_ADMIN_PASSWORD ']'
++ '[' -v POSTGRESQL_MIGRATION_REMOTE_HOST -a -v POSTGRESQL_MIGRATION_ADMIN_PASSWORD ']'
++ case "$postinitdb_actions" in
++ generate_passwd_file
+++ id -u
++ export USER_ID=26
++ USER_ID=26
+++ id -g
++ export GROUP_ID=26
++ GROUP_ID=26
++ grep -v -e '^postgres' -e '^26' /etc/passwd
++ echo 'postgres:x:26:26:PostgreSQL Server:/var/lib/pgsql:/bin/bash'
++ export LD_PRELOAD=libnss_wrapper.so
++ LD_PRELOAD=libnss_wrapper.so
++ export NSS_WRAPPER_PASSWD=/var/lib/pgsql/passwd
++ NSS_WRAPPER_PASSWD=/var/lib/pgsql/passwd
++ export NSS_WRAPPER_GROUP=/etc/group
++ NSS_WRAPPER_GROUP=/etc/group
++ generate_postgresql_config
++ envsubst
++ '[' false == true ']'
++ should_hack_data_sync_retry
+++ uname -p
++ '[' x86_64 == x86_64 ']'
++ return 1
++ shopt -s nullglob
++ PG_INITIALIZED=false
++ '[' '!' -f /var/lib/pgsql/data/userdata/postgresql.conf ']'
++ cat /var/lib/pgsql/data/userdata/postgresql.conf
+cat: /var/lib/pgsql/data/userdata/postgresql.conf: No such file or directory
