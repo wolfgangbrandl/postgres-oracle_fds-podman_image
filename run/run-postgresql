@@ -16,10 +16,10 @@ LOG_FILE=/tmp/run-postgresql.out
 export ENABLE_REPLICATION=${ENABLE_REPLICATION:-false}
 
 set -eu
-export_vars=$(cgroup-limits) ; export $export_vars
+#export_vars=$(cgroup-limits) ; export $export_vars
 
 source "${CONTAINER_SCRIPTS_PATH}/common.sh"
-
+ldd /usr/lib64/libnss_wrapper.so
 set_pgdata
 echo APP_DATA $APP_DATA
 echo CONTAINER_SCRIPTS_PATH $CONTAINER_SCRIPTS_PATH
@@ -42,8 +42,8 @@ fi
 # Use insanely large timeout (24h) to ensure that the potential recovery has
 # enough time here to happen (unless liveness probe kills us).  Note that in
 # case of server failure this command still exists immediately.
-pg_ctl start -w -l logfile --timeout 86400 -o "-h ''"
-cat logfile
+pg_ctl start -w -l /tmp/logfile --timeout 86400 -o "-h ''"
+cat /tmp/logfile
 
 # This is just a pedantic safety measure (the timeout above is unlikely to
 # happen), but `pt_ctl -w` is not reliable prior to PostgreSQL v10 where it
