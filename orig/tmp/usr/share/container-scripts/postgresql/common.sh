@@ -188,19 +188,19 @@ initdb_wrapper ()
 {
   # Initialize the database cluster with utf8 support enabled by default.
   # This might affect performance, see:
-  # http://www.postgresql.org/docs/12/static/locale.html
+  # http://www.postgresql.org/docs/13/static/locale.html
   LANG=${LANG:-en_US.utf8} "$@"
 }
 
 function initialize_database() {
   initdb_wrapper initdb
+
   # PostgreSQL configuration.
   cat >> "$PGDATA/postgresql.conf" <<EOF
 
 # Custom OpenShift configuration:
 include '${POSTGRESQL_CONFIG_FILE}'
 EOF
-  sed -i "/unix_socket_directories/c\unix_socket_directories = '/var/run/postgresql, /tmp'  # comma-separated list of directories" $PGDATA/postgresql.conf
 
   # Access control configuration.
   # FIXME: would be nice-to-have if we could allow connections only from
