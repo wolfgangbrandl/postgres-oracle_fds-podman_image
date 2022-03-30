@@ -1,6 +1,6 @@
 # Get the baseimage from an external registry
-#FROM registry.redhat.io/rhel8/postgresql-12
-FROM registry.access.redhat.com/ubi8:8.5-226.1645809065
+FROM registry.redhat.io/rhel8/postgresql-12
+#FROM registry.access.redhat.com/ubi8:8.5-226.1645809065
 ENV POSTGRESQL_VERSION=13 \
     HOME=/var/lib/pgsql \
     PGUSER=postgres \
