@@ -1,0 +1,12 @@
+{
+    "metadata": {
+        "icm_version": 1,
+        "icm_spec": "https://raw.githubusercontent.com/containerbuildsystem/atomic-reactor/master/atomic_reactor/schemas/content_manifest.json",
+        "image_layer_index": 2
+    },
+    "content_sets": [
+        "rhel-7-server-rpms",
+        "rhel-7-server-optional-rpms"
+    ],
+    "image_contents": []
+}
