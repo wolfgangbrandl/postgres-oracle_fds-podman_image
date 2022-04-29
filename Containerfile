@@ -6,20 +6,12 @@ ENV POSTGRESQL_VERSION=13 \
     PGUSER=postgres \
     APP_DATA=/opt/app-root
 
-LABEL summary="BRZ PaaS Database Image Postgresl 13 with oracle_fdw. No maintenance from PaaS Team! Use this as a base or deploy your own base without any support!"\
-      maintainer="cp Admins <cpadm@brz.gv.at>" \
-      vendor="BRZ GmbH" \
-      at.cna.cp.baseversion="1.0" \
-      at.cna.cp.imagename="brz-cp-rhel8-postgresql-13.3" \
-      io.k8s.display-name="BRZ PaaS Database Image Postgresl 13.3"
-
 # Comment
 USER root:root
 RUN yum -y install  --skip-broken --allowerasing --nobest unzip.x86_64 make.x86_64 gcc.x86_64 bison flex readline.x86_64 readline-devel.x86_64 zlib.x86_64 zlib-devel.x86_64 openssl-devel libxml2-devel git wget libnsl2 libaio
 RUN yum -y remove postgresql-contrib postgresql-server
-RUN  mkdir -p $APP_DATA/src 
+RUN  mkdir -p $APP_DATA/src && mkdir -p $APP_DATA/usr
 ADD ./postgres.tar.gz $APP_DATA/src
-RUN  ls -l $APP_DATA/src && mkdir -p $APP_DATA/usr
 RUN  cd $APP_DATA/src/postgresql && ./configure --prefix=$APP_DATA/usr --disable-rpath --with-openssl --with-libxml && \
      gmake -f Makefile clean all install && \
      cd contrib && \
@@ -29,15 +21,11 @@ ADD ./instantclient-sqlplus-linux.x64-19.14.0.0.0dbru.zip $APP_DATA/src
 ADD ./instantclient-sdk-linux.x64-19.14.0.0.0dbru.zip $APP_DATA/src
 RUN cd $APP_DATA/src && unzip instantclient-basic-linux.x64-19.14.0.0.0dbru.zip && unzip instantclient-sqlplus-linux.x64-19.14.0.0.0dbru.zip && \
     unzip instantclient-sdk-linux.x64-19.14.0.0.0dbru.zip && rm -f *.zip
-RUN  ls -l $APP_DATA/src
-RUN  ls -l $APP_DATA/usr
-RUN  ls -Rl $APP_DATA/usr/share
 RUN cp $APP_DATA/src/instantclient_19_14/*.so* $APP_DATA/usr/lib
-RUN pwd && ls -l
 ADD ./oracle_fdw.tar.gz $APP_DATA/src/postgresql/contrib
 RUN cd $APP_DATA/src/postgresql/contrib/oracle_fdw && export ORACLE_HOME=$APP_DATA/src/instantclient_19_14; export NO_PGXS=1;gmake clean all install
-RUN cd $APP_DATA/src && rm -rf postgresql &&  rm -rf instantclient_19_14  
-RUN cd $APP_DATA/usr && tar cvf ../post.tar ./lib ./share ./bin && gzip ../post.tar
+RUN cd $APP_DATA/src && rm -rf postgresql &&  rm -rf instantclient_19_14  && \
+    cd $APP_DATA/usr && tar cvf ../post.tar ./lib ./share ./bin && gzip ../post.tar
 # build image without build library just runtime
 FROM registry.redhat.io/rhel8/postgresql-12
 ENV POSTGRESQL_VERSION=13 \
@@ -79,10 +67,7 @@ RUN mkdir -p /var/lib/pgsql/data && \
 ENV CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/postgresql \
     ENABLED_COLLECTIONS=\
     LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
-
-
 USER 26
-
 ENTRYPOINT ["container-entrypoint"]
 CMD ["run-postgresql"]
 
